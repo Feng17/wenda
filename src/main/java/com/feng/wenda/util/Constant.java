@@ -5,5 +5,5 @@ public class Constant {
     //发送方邮箱地址
     public static final String MAIL_FROM = "";
 
-    public static final String DOMAIN_NAME = "http://localhost:8080/";
+    public static final String DOMAIN_NAME = "http://127.0.0.1:8080/";
 }

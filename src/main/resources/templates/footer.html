@@ -1,0 +1,27 @@
+<ul class="pagination pagination-lg">
+    <li>
+        <a href="${request.contextPath}/index?pageNum=1&pageSize=${vos.pageSize}">首页</a>
+    </li>
+    <#if vos.hasPreviousPage>
+
+        <li>
+            <a href="${request.contextPath}/index?pageNum=${vos.prePage}&pageSize=${vos.pageSize}">前一页</a>
+        </li>
+    </#if>
+    <#list vos.navigatepageNums as nav>
+            <li class="pageNum">
+                <a href="${request.contextPath}/index?pageNum=${nav}&pageSize=${vos.pageSize}">${nav}</a>
+            </li>
+    </#list>
+
+    <#if vos.hasNextPage>
+        <li>
+            <a href="${request.contextPath}/index?pageNum=${vos.nextPage}&pageSize=${vos.pageSize}">下一页</a>
+        </li>
+
+    </#if>
+
+    <li>
+        <a href="${request.contextPath}/index?pageNum=${vos.pages}&pageSize=${vos.pageSize}">尾页</a>
+    </li>
+</ul>

@@ -144,5 +144,13 @@ public class UserService {
         loginTokenDao.addLoginToken(token);
         return token.getToken();
     }
+    public User selectUserById(int id) {
+        return userDao.selectUserById(id);
+    }
+
+
+    public void logout(int id,int status){
+    loginTokenDao.updateStatusByUserId(id,status);
+    }
 
 }

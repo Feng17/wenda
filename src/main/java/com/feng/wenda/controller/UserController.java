@@ -47,10 +47,10 @@ public class UserController {
         Map<String, Object> map = userService.login(username, password, response);
         return map;
     }
-
-
-    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public String index() {
-        return "index";
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        userService.logout(hostHolder.getUser().getId(), 1);
+        return "redirect:/login";
     }
+
 }

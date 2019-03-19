@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>学生信息管理</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>问答</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="page-header">
@@ -91,51 +91,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(function () {
-        $("#registerButton").click(function () {
-            $.ajax({
-                url: "/register",
-                type: "post",
-                data: {username: $("#registerUsername").val(),email:$("#registerEmail").val(), password: $("#registerPassword").val()},
-                success: function (result) {
-                    if (result.msg == "ok") {
-                        alert("激活邮件已发送，验证后就登录了")
-                        $("#myModal").modal("hide");
-                        $("#registerUsername").val("");
-                        $("#registerEmail").val("");
-                        $("#registerPassword").val("");
-                        $("#registerError").text("");
-                    } else {
-                        $("#registerError").text(result.msg);
-
-                    }
-                }
-            });
-        });
-        $("#loginButton").click(function () {
-            $.ajax({
-                url: "/signin",
-                type: "post",
-                data: {username: $("#loginUsername").val(), password: $("#loginPassword").val()},
-                success: function (result) {
-                    if (result.msg) {
-                        $("#loginError").text(result.msg);
-                    } else {
-                        window.location.href = "/index";
-                    }
-                }
-            });
-        });
-
-        $("#modalClose").click(function () {
-            $("#registerUsername").val("");
-            $("#registerEmail").val("");
-            $("#registerPassword").val("");
-            $("#registerError").text("");
-        });
-
-    });
-</script>
+<script type="text/javascript" src="${request.contextPath}/js/login.js"></script>
 </body>
 </html>

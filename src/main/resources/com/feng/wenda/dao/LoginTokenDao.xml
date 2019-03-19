@@ -14,7 +14,7 @@
         where token=#{token}
     </select>
 
-    <update id="updateStatus">
+    <update id="updateStatusByUserId">
         update login_token set status=#{status} where user_id=#{userId}
     </update>
 

@@ -11,6 +11,6 @@ public interface LoginTokenDao {
 
     LoginToken selectLoginTokenByToken(String token);
 
-    void updateStatus(@Param("userId") Integer userId, @Param("status") Integer status);
+    void updateStatusByUserId(@Param("userId") Integer userId, @Param("status") Integer status);
 
 }

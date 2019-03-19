@@ -1,12 +1,13 @@
 package com.feng.wenda.interceptor;
 
+
 import com.feng.wenda.dao.LoginTokenDao;
 import com.feng.wenda.dao.UserDao;
 import com.feng.wenda.model.HostHolder;
 import com.feng.wenda.model.LoginToken;
 import com.feng.wenda.model.User;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class PassportInterceptor implements HandlerInterceptor {
     @Autowired
     LoginTokenDao loginTokenDao;
 
@@ -27,17 +28,12 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     HostHolder hostHolder;
 
-
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handle) throws Exception {
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (ArrayUtils.isEmpty(cookies)) {
-            response.sendRedirect("/login");
-            return false;
-        } else {
-            for (Cookie cookie : cookies) {
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals("token")) {
                     token = cookie.getValue();
                     break;
@@ -45,33 +41,28 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         }
 
-        if (token.isEmpty()) {
-            response.sendRedirect("/login");
-            return false;
-        } else {
+        if (token != null) {
             LoginToken loginToken = loginTokenDao.selectLoginTokenByToken(token);
-            //如果loginToken不存在或者是登出状态或者已经失效就返回到登录页面
             if (loginToken == null || loginToken.getExpired().before(new Date()) || loginToken.getStatus() == 1) {
-                response.sendRedirect("/login");
-                return false;
+                return true;
             }
+
             User user = userDao.selectUserById(loginToken.getUserId());
             hostHolder.setUser(user);
+
         }
         return true;
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handle, ModelAndView modelAndView) throws Exception {
-        if (modelAndView != null && hostHolder.getUser() != null) {
-            modelAndView.addObject("user", hostHolder.getUser());
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+        if (modelAndView != null) {
+            modelAndView.addObject("currentUser", hostHolder.getUser());
         }
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handle, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         hostHolder.clear();
-
     }
 }
-

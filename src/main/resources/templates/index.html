@@ -1,10 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-index
+<#include "header.html"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+
+            <#list vos.list as vo>
+                <div class="answer-item site-box">
+                    <p class="text-muted">来自话题:${vo.topic.topicName!}</p>
+                    <div class="media">
+                        <a href="/question/${vo.question.id!}" class="media-left"><img width="24" height="24"
+                                                                                       src="/image?name=${vo.user.image!}"
+                                                                                       alt="头像"
+                                                                                       class="media-object"></a>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="/user/${vo.user.id}">${vo.user.name!}</a>
+                                <small>, ${vo.user.description!}</small>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="question-title">
+                        <h3><a href="/question/${vo.question.id!}"> ${vo.question.title!}</a></h3>
+                    </div>
+                    <div class="answer-content">
+                        <a href="/question/${vo.question.id!}"><p> ${vo.question.content!}</p></a>
+                    </div>
+                    <div class="answer-meta">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-down"></span>
+                        </button>
+                        <a href="/question/${vo.question.id}">
+                            <button type="button" class="btn btn-default btn-sm"> ${vo.question.commentCount!} 条评论
+                            </button>
+                        </a>
+                        <span class="text-muted"><small>  ${vo.question.createdDate?datetime!}</small></span>
+                    </div>
+
+                </div>
+            </#list>
+
+            <#include "footer.html"/>
+
+        </div>
+
+        <div class="col-sm-4">
+            <#if currentUser??>
+                <div class="site-box">
+                    <div class="media">
+                        <a href="/user/${currentUser.id!}" class="media-left">
+                            <img width="60" height="60" src="/image?name=${currentUser.image!}" alt="头像"
+                                 class="media-object">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="/user/${currentUser.id}">${currentUser.name!}</a></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="">
+                        <ul class="nav nav-stacked">
+                            <li><a href=""><span class="badge pull-right"></span><b>我的收藏</b></a></li>
+                            <li><a href=""><span class="badge pull-right"></span><b>我关注的问题</b></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <#else>
+                    <div class="site-box right-block">
+                        <h4>加入问答</h4>
+                        <p>
+                            <a href="/login">
+                                <button class="btn btn-primary btn-lg btn-block">注册</button>
+                            </a>
+                            <a href="/login">
+                                <button class="btn btn-default btn-lg btn-block">登录</button>
+                            </a>
+                        </p>
+                    </div>
+            </#if>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(function () {
+        var curPage =${vos.pageNum};
+        $(".pageNum").each(function () {
+            if ($(this).text() == curPage) {
+                $(this).addClass("active");
+            }
+        });
+    });
+</script>
 </body>
 </html>
