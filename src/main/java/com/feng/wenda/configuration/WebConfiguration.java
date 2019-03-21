@@ -18,7 +18,9 @@ private PassportInterceptor passportInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor);
-        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/user/*");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/user/**");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/uploadImage");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/editProfile");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/question/*");
         super.addInterceptors(registry);
     }

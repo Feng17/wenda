@@ -10,7 +10,7 @@
     </select>
 
     <select id="selectUserById" resultType="com.feng.wenda.model.User">
-        select  id,name,password,salt
+        select  id,name,password,salt,image,email,description
         from user
         where id=#{id}
     </select>
@@ -35,4 +35,14 @@
     <select id="selectUserByCode" resultType="com.feng.wenda.model.User">
         select id,name,state from user where code = #{code}
     </select>
+
+
+    <update id="updateImage" >
+        update user set image = #{image} where id = #{id}
+    </update>
+
+
+    <update id="updateUserProfile">
+        update user set name =#{name},description = #{description} where id = #{id}
+    </update>
 </mapper>

@@ -2,6 +2,7 @@ package com.feng.wenda.dao;
 
 import com.feng.wenda.model.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserDao {
@@ -19,4 +20,8 @@ public interface UserDao {
     int selectStateByUsername(String name);
 
     User selectUserByCode(String code);
+
+    void updateImage(@Param("image") String image, @Param("id") Integer id);
+
+    void updateUserProfile(User user);
 }

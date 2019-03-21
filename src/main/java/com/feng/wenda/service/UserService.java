@@ -5,14 +5,18 @@ import com.feng.wenda.dao.LoginTokenDao;
 import com.feng.wenda.dao.UserDao;
 import com.feng.wenda.model.LoginToken;
 import com.feng.wenda.model.User;
+import com.feng.wenda.util.Constant;
 import com.feng.wenda.util.MailUtil;
 import com.feng.wenda.util.WendaUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -144,13 +148,43 @@ public class UserService {
         loginTokenDao.addLoginToken(token);
         return token.getToken();
     }
+
     public User selectUserById(int id) {
         return userDao.selectUserById(id);
     }
 
 
-    public void logout(int id,int status){
-    loginTokenDao.updateStatusByUserId(id,status);
+    public void logout(int id, int status) {
+        loginTokenDao.updateStatusByUserId(id, status);
     }
 
+    public void upload(MultipartFile file,int id){
+        try {
+            String image = saveImage(file);
+            userDao.updateImage(image,id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String saveImage(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        //获取扩展名
+        String extName = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if (!WendaUtil.isImageFile(extName)) {
+            return null;
+        }
+
+        //重命名图片
+        String newFileName = UUID.randomUUID().toString().replaceAll("-", "").concat("." + extName);
+        //将文件保存到另一目标文件
+        file.transferTo(new File(Constant.IMAGE_DIR + newFileName));
+        return Constant.DOMAIN_NAME + "image?name=" + newFileName;
+    }
+
+
+    public void updateUserProfile(User user){
+        userDao.updateUserProfile(user);
+    }
 }

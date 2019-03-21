@@ -2,16 +2,19 @@ package com.feng.wenda.controller;
 
 
 import com.feng.wenda.model.HostHolder;
+import com.feng.wenda.model.User;
 import com.feng.wenda.service.UserService;
+import com.feng.wenda.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 @Controller
@@ -47,10 +50,52 @@ public class UserController {
         Map<String, Object> map = userService.login(username, password, response);
         return map;
     }
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         userService.logout(hostHolder.getUser().getId(), 1);
         return "redirect:/login";
     }
 
+
+    @RequestMapping(value = "/user/editProfile")
+    public String userProfile(Model model) {
+        User user = userService.selectUserById(hostHolder.getUser().getId());
+        model.addAttribute("user", user);
+        return "editProfile";
+    }
+
+    @RequestMapping("/editProfile")
+    public String editProfile(@RequestParam("name") String name,@RequestParam("description") String description ) {
+        User user = new User();
+        user.setName(name);
+        user.setDescription(description);
+        user.setId(hostHolder.getUser().getId());
+        userService.updateUserProfile(user);
+        return "redirect:/user/editProfile";
+    }
+
+
+    @RequestMapping(path = {"/uploadImage"}, method = {RequestMethod.POST})
+    public String uploadImage(@RequestParam("file") MultipartFile file) {
+        userService.upload(file,hostHolder.getUser().getId());
+        return "redirect:/user/editProfile";
+
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public void getImage(@RequestParam("name") String imageName, HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg");
+        response.setCharacterEncoding("UTF-8");
+        FileInputStream in = new FileInputStream(Constant.IMAGE_DIR + imageName);
+        int i = in.available();
+        byte[] data = new byte[i];
+        in.read(data);
+        in.close();
+
+        OutputStream out = response.getOutputStream();
+        out.write(data);
+        out.flush();
+        out.close();
+    }
 }

@@ -31,4 +31,17 @@ public class WendaUtil {
             return null;
         }
     }
+
+
+
+    //判断文件类型是否为图片
+    public static boolean isImageFile(String extName) {
+        String imageExt[] = new String[]{"jpg", "jpeg", "png", "gif"};
+        for (String ext : imageExt) {
+            if (ext.equals(extName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
