@@ -10,7 +10,7 @@ public class Question {
     private Date createdDate;
     private int userId;
     private int topicId;
-    private int commentCount;
+    private int answerCount;
 
     public int getId() {
         return id;
@@ -60,11 +60,11 @@ public class Question {
         this.topicId = topicId;
     }
 
-    public int getCommentCount() {
-        return commentCount;
+    public int getAnswerCount() {
+        return answerCount;
     }
 
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
     }
 }

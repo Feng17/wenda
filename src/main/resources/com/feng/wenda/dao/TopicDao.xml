@@ -6,4 +6,8 @@
     <select id="selectTopicById"  resultType="com.feng.wenda.model.Topic">
         select id,topic_name,topic_desc from topic where id = #{topicId}
     </select>
+
+    <select id="selectTopicList" resultType="com.feng.wenda.model.Topic">
+        select id,topic_name from topic
+    </select>
 </mapper>

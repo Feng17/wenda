@@ -6,4 +6,14 @@
     <select id="selectQuestionList" resultType="com.feng.wenda.model.Question">
         select * from question order by created_date desc
     </select>
+
+    <insert id="addQuestion">
+        insert into question(title,content,created_date,user_id,topic_id,answer_count)
+        values(#{title},#{content},#{createdDate},#{userId},#{topicId},#{answerCount})
+    </insert>
+
+
+    <select id="selectQuestionById" resultType="com.feng.wenda.model.Question">
+        select * from question where id = #{questionId}
+    </select>
 </mapper>

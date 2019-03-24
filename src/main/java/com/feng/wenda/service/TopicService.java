@@ -5,6 +5,8 @@ import com.feng.wenda.model.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TopicService {
 
@@ -15,4 +17,8 @@ public class TopicService {
         return topicDao.selectTopicById(topicId);
     }
 
+
+    public List<Topic> selectTopicList(){
+        return topicDao.selectTopicList();
+    }
 }

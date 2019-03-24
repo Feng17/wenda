@@ -9,4 +9,8 @@ import java.util.List;
 public interface QuestionDao {
 
     List<Question> selectQuestionList();
+
+    void addQuestion(Question question);
+
+    Question selectQuestionById(int questionId);
 }

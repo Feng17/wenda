@@ -22,6 +22,8 @@ private PassportInterceptor passportInterceptor;
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/uploadImage");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/editProfile");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/question/*");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/askQuestion");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/addQuestion");
         super.addInterceptors(registry);
     }
 }
