@@ -32,7 +32,12 @@ public class QuestionService {
     }
 
 
-    public Question selectQuestionById(int questionId){
+    public Question selectQuestionById(int questionId) {
         return questionDao.selectQuestionById(questionId);
+    }
+
+
+    public void updateAnswerCount(int questionId, int answerCount) {
+        questionDao.updateAnswerCount(questionId, answerCount);
     }
 }

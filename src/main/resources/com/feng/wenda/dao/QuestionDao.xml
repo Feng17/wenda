@@ -16,4 +16,8 @@
     <select id="selectQuestionById" resultType="com.feng.wenda.model.Question">
         select * from question where id = #{questionId}
     </select>
+
+    <update id="updateAnswerCount">
+        update question set answer_count = #{answerCount} where id = #{questionId}
+    </update>
 </mapper>

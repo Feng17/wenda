@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.feng.wenda.dao.AnswerDao">
+
+    <insert id="addAnswer">
+        insert into answer (user_id,content,question_id,created_date) values(#{userId},#{content},#{questionId},#{createdDate})
+    </insert>
+
+    <select id="getAnswerCount" resultType="int">
+          select count(*) from answer where id = #{questionId}
+    </select>
+
+
+    <select id="selectAnswerList" resultType="com.feng.wenda.model.Answer">
+        select * from answer where question_id = #{questionId}
+    </select>
+
+</mapper>

@@ -24,6 +24,8 @@ private PassportInterceptor passportInterceptor;
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/question/*");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/askQuestion");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/addQuestion");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/answerQuestion");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/addAnswer");
         super.addInterceptors(registry);
     }
 }

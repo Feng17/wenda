@@ -1,7 +1,5 @@
 <#include "header.html"/>
 
-
-
 <div class="container-fluit">
     <div class="container">
         <div class="row">
@@ -18,7 +16,7 @@
                     <p>${question.content}</p>
                     <div class="question-meta">
                         <button type="button" class="btn btn-primary">关注问题</button>
-                        <a href="/question/${question.id}/answer"><button type="button" class="btn btn-default">写回答</button></a>
+                        <a href="/question/${question.id}/answerQuestion"><button type="button" class="btn btn-default">写回答</button></a>
                         <span>${question.createdDate?datetime}</span>
                     </div>
                 </div>
@@ -42,22 +40,73 @@
     </div>
 </div>
 
-
-
-
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
             <div class="site-box">
                 <div class="clearfix">
-                    <strong> 个回答</strong>
+                    <strong>${question.answerCount!} 个回答</strong>
                 </div>
                 <hr>
 
 
-                <p>暂时没有回答</p>
+<#if vos.list?size gt 0 >
+
+    <#list vos.list as vo>
+
+        <div class="answer-item">
+
+            <div class="media">
+                <a target="_blank" href="user/${vo.user.id}" class="media-left"><img width="24" height="24" src="${vo.user.image}" alt="头像" class="media-object"></a>
+                <div class="media-body">
+                    <h4 class="media-heading"><a target="_blank" href="/user/${vo.user.id}">${vo.user.name}</a></h4>
+                    <p class="text-muted">${vo.user.description}</p>
+                </div>
+            </div>
+            <p class="text-muted"> 人赞同了该回答</p>
+            <p>
+               ${vo.answer.content}
+            </p>
+            <p class="text-muted">发布于 ${vo.answer.createdDate?datetime}</p>
+            <div class="answer-meta">
+                <a href=""> <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                </button></a>
+                <a href=""> <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                </button></a>
+            </div>
+        </div>
+
+    </#list>
+    <ul class="pagination pagination-lg">
+
+        <#if vos.hasPreviousPage>
+
+            <li>
+                <a href="${request.contextPath}/question/${question.id}?pageNum=${vos.prePage}&pageSize=${vos.pageSize}">前一页</a>
+            </li>
+        </#if>
+        <#list vos.navigatepageNums as nav>
+            <li class="pageNum">
+                <a href="${request.contextPath}/question/${question.id}?pageNum=${nav}&pageSize=${vos.pageSize}">${nav}</a>
+            </li>
+        </#list>
+
+        <#if vos.hasNextPage>
+            <li>
+                <a href="${request.contextPath}/question/${question.id}?pageNum=${vos.nextPage}&pageSize=${vos.pageSize}">下一页</a>
+            </li>
+
+        </#if>
+
+    </ul>
+
+    <#else>
+
+        <p>暂时没有回答</p>
+</#if>
+
 
             </div>
 
@@ -74,3 +123,16 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        var curPage =${vos.pageNum};
+        $(".pageNum").each(function () {
+            if ($(this).text() == curPage) {
+                $(this).addClass("active");
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
