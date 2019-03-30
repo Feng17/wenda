@@ -40,4 +40,8 @@ public class QuestionService {
     public void updateAnswerCount(int questionId, int answerCount) {
         questionDao.updateAnswerCount(questionId, answerCount);
     }
+
+    public List<Question> getUserQuestions(int userId){
+        return questionDao.selectUserQuestions(userId);
+    }
 }

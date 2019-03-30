@@ -1,8 +1,9 @@
 package com.feng.wenda.controller;
 
 
-import com.feng.wenda.model.HostHolder;
-import com.feng.wenda.model.User;
+import com.feng.wenda.model.*;
+import com.feng.wenda.service.AnswerService;
+import com.feng.wenda.service.QuestionService;
 import com.feng.wenda.service.UserService;
 import com.feng.wenda.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,6 +27,12 @@ public class UserController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    QuestionService questionService;
+
+    @Autowired
+    AnswerService answerService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -98,4 +107,41 @@ public class UserController {
         out.flush();
         out.close();
     }
+
+
+
+    @RequestMapping(value = {"/user/{userId}/home","/user/{userId}/question"})
+    public String userQuestion(Model model, @PathVariable("userId") int userId) {
+        User user = userService.selectUserById(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("userQuestions", getUserQuestions(userId));
+        return "userQuestion";
+    }
+
+    private List<Question> getUserQuestions(int userId) {
+        List<Question> userQuestions = questionService.getUserQuestions(userId);
+        return userQuestions;
+    }
+
+
+    @RequestMapping(value = "/user/{userId}/answer")
+    public String userAnswer(Model model, @PathVariable("userId") int userId) {
+        User user = userService.selectUserById(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("vos", getUserAnswers(userId));
+        return "userAnswer";
+    }
+
+    private List<ViewObject> getUserAnswers(int userId) {
+        List<Answer> userAnswerList = answerService.getUserAnswers(userId);
+        List<ViewObject> vos = new ArrayList<>();
+        for (Answer answer : userAnswerList){
+            ViewObject vo = new ViewObject();
+            vo.set("answer",answer);
+            vo.set("question",questionService.selectQuestionById(answer.getQuestionId()));
+            vos.add(vo);
+        }
+        return vos;
+    }
+
 }

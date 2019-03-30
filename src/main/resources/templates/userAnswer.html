@@ -1,0 +1,107 @@
+<#include "header.html"/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="site-box">
+                <div class="media">
+                    <div class="media-left"><img width="160" height="160" src="${user.image}" alt="头像" class="media-left"></div>
+                    <div class="media-body">
+                        <h3 class="media-heading username-big">${user.name}</h3>
+                        <p>${user.description!}</p>
+                        <#if currentUser?? && (currentUser.id)==(user.id)>
+                            <div class="text-right"><a href="/user/editProfile"><button class="btn btn-default">编辑个人资料</button></a></div>
+                        </#if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="site-box">
+                <div class="nav nav-pills header-bar">
+                    <#if  request.requestUri?ends_with("home") || request.requestUri?ends_with("question") >
+                        <li class="active"><a href="/user/${user.id}/question">提问</a></li>
+                        <#else>
+                            <li ><a href="/user/${user.id}/question">提问</a></li>
+                    </#if>
+                    <#if  request.requestUri?ends_with("answer")>
+                        <li class="active"><a href="/user/${user.id}/answer">回答</a></li>
+                        <#else>
+                            <li><a href="/user/${user.id}/answer">回答</a></li>
+                    </#if>
+
+                </div>
+                <hr>
+                <h4>
+                    <#if currentUser?? && (currentUser.id)==(user.id)>
+                        我的回答
+                        <#else> Ta的回答
+                    </#if>
+                </h4>
+                <hr>
+
+
+                <#list vos as vo>
+                <div class="trend-item">
+
+                    <h3><a href="/question/${vo.question.id}">${vo.question.title}</a></h3>
+                    <div class="media">
+                        <a href="/user/${user.id}" class="media-left"><img width="24" height="24" src="${user.image}" alt="头像" class="media-object"></a>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="/user/${user.id}">${user.name}</a></h4>
+                            <p class="text-muted">${user.description!}</p>
+                        </div>
+                    </div>
+                    <p class="text-muted"> 人赞同了该回答</p>
+                    <p class="answer-content"><a href="/question/${vo.question.id}">${vo.answer.content}</a></p>
+                    <p class="text-muted"> ${vo.answer.createdDate?datetime}</p>
+                    <div class="answer-meta">
+                        <a href=""> <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </button></a>
+                        <a href=""> <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-down"></span>
+                        </button></a>
+                    </div>
+                </div>
+
+                </#list>
+
+
+
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="site-box">
+                <h4>个人成就</h4>
+                <hr>
+                <p><span class="glyphicon glyphicon-thumbs-up"></span> 获得  次赞同</p>
+                <p><span class="glyphicon glyphicon-star"></span> 获得  次收藏</p>
+            </div>
+            <div class="site-box">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="text-center">关注了</p>
+                        <p class="text-center"><a class="info-num" href=""></a></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="text-center">关注者</p>
+                        <p class="text-center"><a class="info-num" href=""></a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="site-box">
+                <div class="nav nav-pills nav-stacked">
+                    <li><a href=""><span class="badge pull-right"></span>收藏的回答</a></li>
+                    <li><a href=""><span class="badge pull-right"></span>关注的话题</a></li>
+                    <li><a href=""><span class="badge pull-right"></span>关注的问题</a></li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

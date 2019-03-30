@@ -14,4 +14,6 @@ public interface AnswerDao {
 
     List<Answer> selectAnswerList(int questionId);
 
+    List<Answer> selectUserAnswers(int userId);
+
 }

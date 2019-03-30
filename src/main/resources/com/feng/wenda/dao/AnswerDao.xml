@@ -8,12 +8,17 @@
     </insert>
 
     <select id="getAnswerCount" resultType="int">
-          select count(*) from answer where id = #{questionId}
+          select count(*) from answer where question_id = #{questionId}
     </select>
 
 
     <select id="selectAnswerList" resultType="com.feng.wenda.model.Answer">
         select * from answer where question_id = #{questionId}
+    </select>
+
+
+    <select id="selectUserAnswers" resultType="com.feng.wenda.model.Answer">
+        select * from answer where user_id = #{userId} order by created_date desc
     </select>
 
 </mapper>

@@ -16,4 +16,6 @@ public interface QuestionDao {
     Question selectQuestionById(int questionId);
 
     void updateAnswerCount(@Param("questionId") int questionId,@Param("answerCount") int answerCount);
+
+    List<Question> selectUserQuestions(int userId);
 }

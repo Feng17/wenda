@@ -27,7 +27,6 @@
                 <li><a href="/topic">话题</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-
                 <#if currentUser??>
                     <li>
                         <a  href="/askQuestion">发布问题
@@ -45,7 +44,7 @@
                         <ul class="dropdown-menu">
 
                             <li>
-                                <a href="/user/editProfile">个人设置</a>
+                                <a href="/user/${currentUser.id}/home">个人主页</a>
                             </li>
                             <li>
                                 <a href="/msg/list">私信列表</a>

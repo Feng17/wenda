@@ -35,4 +35,9 @@ public class AnswerService {
         int answerCount = answerDao.getAnswerCount(questionId);
         questionService.updateAnswerCount(questionId, answerCount);
     }
+
+
+    public List<Answer> getUserAnswers(int userId){
+        return answerDao.selectUserAnswers(userId);
+    }
 }

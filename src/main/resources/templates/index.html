@@ -13,7 +13,7 @@
                                                                                        alt="头像"
                                                                                        class="media-object"></a>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="/user/${vo.user.id}">${vo.user.name!}</a>
+                            <h4 class="media-heading"><a href="/user/${vo.user.id}/home">${vo.user.name!}</a>
                                 <small>, ${vo.user.description!}</small>
                             </h4>
                         </div>
@@ -49,12 +49,12 @@
             <#if currentUser??>
                 <div class="site-box">
                     <div class="media">
-                        <a href="/user/${currentUser.id!}" class="media-left">
+                        <a href="/user/${currentUser.id!}/home" class="media-left">
                             <img width="60" height="60" src="${currentUser.image!}" alt="头像"
                                  class="media-object">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="/user/${currentUser.id}">${currentUser.name!}</a></h4>
+                            <h4 class="media-heading"><a href="/user/${currentUser.id}/home">${currentUser.name!}</a></h4>
                         </div>
                     </div>
                     <hr>
