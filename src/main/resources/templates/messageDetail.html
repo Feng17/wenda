@@ -1,0 +1,83 @@
+<#include "header.html"/>
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="site-box">
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">发私信给${toUsername}:</label>
+                        <div class="col-sm-8">
+                            <input id="toUsername" type="hidden" value="${toUsername}">
+                            <textarea class="form-control" type="text" rows="8" id="content" placeholder="请填写内容"
+                                      required></textarea>
+                        </div>
+                    </div>
+                    <span id="sendError" style="color:red;font-weight:bold"></span>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <button id="sendButton" class="btn btn-primary btn-block" type="button">发送</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="site-box">
+
+                <#list vos as vo>
+                    <div class="answer-item site-box">
+                        <div class="media">
+                            <a href="/user/${vo.user.id}" class="media-left"><img width="24" height="24"
+                                                                                  src="${vo.user.image!}"
+                                                                                  alt="头像"
+                                                                                  class="media-object"></a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="/user/${vo.user.id}/home">${vo.user.name}</a>
+                                    <small>, ${vo.user.description!}</small>
+                                </h4>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="answer-content">
+                        <p> ${vo.message.content}</p></a>
+                        </div>
+                        <div class="answer-meta">
+                            <span class="text-muted"><small>回复时间  ${vo.message.createdDate?datetime!}</small></span>
+                        </div>
+                    </div>
+                </#list>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $("#sendButton").click(function () {
+        $.ajax({
+            url: "/sendMessage",
+            type: "post",
+            data: {toUsername: $("#toUsername").val(), content: $("#content").val()},
+            success: function (result) {
+                if (result.ok) {
+                    window.location.href = "/messageDetail?conversationId="+ result.ok;
+                } else {
+                    $("#sendError").text(result.msg);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

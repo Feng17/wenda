@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.feng.wenda.dao.MessageDao">
+
+    <insert id="addMessage">
+        insert into message (from_id, to_id, content, created_date, conversation_id)
+        values(#{fromId},#{toId},#{content},#{createdDate},#{conversationId})
+    </insert>
+
+    <select id="getConversationList" resultType="com.feng.wenda.model.Message">
+           select * from (select * from message  where from_id = #{userId} or to_id = #{userId} order by created_date desc )
+                           as msg group by conversation_id order by created_date desc
+    </select>
+
+
+    <select id="getConversationDetail" resultType="com.feng.wenda.model.Message">
+         select  * from message where conversation_id = #{conversationId} order by created_date desc
+    </select>
+
+    <select id="selectOneMessageByConversationId" resultType="com.feng.wenda.model.Message">
+        select from_id,to_id from message where conversation_id = #{conversationId} limit 1
+    </select>
+
+</mapper>

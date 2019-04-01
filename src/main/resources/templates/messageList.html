@@ -1,0 +1,55 @@
+<#include "header.html"/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="site-box">
+                <h4>
+                 最近联系
+                </h4>
+                <hr>
+
+
+                <#list vos as vo>
+                    <div class="answer-item site-box">
+                        <div class="media">
+                            <a href="/user/${vo.user.id}" class="media-left"><img width="24" height="24"
+                                                                                           src="${vo.user.image!}"
+                                                                                           alt="头像"
+                                                                                           class="media-object"></a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="/user/${vo.user.id}/home">${vo.user.name!}</a>
+                                    <small>, ${vo.user.description!}</small>
+                                </h4>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="answer-content">
+
+                            <#if vo.message.fromId == currentUser.id>
+                                <h4>  我发送给 ${vo.user.name} : </h4> <a href="/messageDetail?conversationId=${vo.message.conversationId} "><p> ${vo.message.content}</p></a>
+                                <#else>
+                                    <h4>   ${vo.user.name} : </h4>  <a href="/messageDetail?conversationId=${vo.message.conversationId} "><p> ${vo.message.content}</p></a>
+                            </#if>
+                        </div>
+                        <div class="answer-meta">
+
+                            <a href="/messageDetail?conversationId=${vo.message.conversationId} ">
+                                <button type="button" class="btn btn-default btn-sm"> 查看对话
+                                </button>
+                            </a>
+                            <a href="/message">
+                                <button type="button" class="btn btn-default btn-sm">回复
+                                </button>
+                            </a>
+                            <span class="text-muted"><small>最后回复时间  ${vo.message.createdDate?datetime!}</small></span>
+                        </div>
+                    </div>
+                </#list>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

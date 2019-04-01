@@ -187,4 +187,8 @@ public class UserService {
     public void updateUserProfile(User user){
         userDao.updateUserProfile(user);
     }
+
+    public User selectUserByName(String name) {
+        return userDao.selectUserByName(name);
+    }
 }

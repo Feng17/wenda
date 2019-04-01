@@ -4,7 +4,7 @@
 <mapper namespace="com.feng.wenda.dao.UserDao">
 
     <select id="selectUserByName" resultType="com.feng.wenda.model.User">
-        select  id,name,password,salt
+        select  id,name,password,salt,image
         from user
         where name=#{name}
     </select>
