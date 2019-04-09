@@ -1,13 +1,7 @@
 package com.feng.wenda.controller;
 
-import com.feng.wenda.model.Answer;
-import com.feng.wenda.model.Question;
-import com.feng.wenda.model.Topic;
-import com.feng.wenda.model.ViewObject;
-import com.feng.wenda.service.AnswerService;
-import com.feng.wenda.service.QuestionService;
-import com.feng.wenda.service.TopicService;
-import com.feng.wenda.service.UserService;
+import com.feng.wenda.model.*;
+import com.feng.wenda.service.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +26,10 @@ public class QuestionController {
     UserService userService;
     @Autowired
     AnswerService answerService;
+    @Autowired
+    LikeService likeService;
+    @Autowired
+    HostHolder hostHolder;
 
     @RequestMapping(value = "/askQuestion", method = RequestMethod.GET)
     public String askQuestion(Model model) {
@@ -73,6 +71,8 @@ public class QuestionController {
             ViewObject vo = new ViewObject();
             vo.set("answer", answer);
             vo.set("user", userService.selectUserById(answer.getUserId()));
+            vo.set("likeStatus", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_ANSWER, answer.getId()));
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_ANSWER, answer.getId()));
             vos.add(vo);
         }
         PageInfo pageResult = new PageInfo(answerList);
