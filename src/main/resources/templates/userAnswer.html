@@ -8,9 +8,25 @@
                     <div class="media-body">
                         <h3 class="media-heading username-big">${user.name}</h3>
                         <p>${user.description!}</p>
+
                         <#if currentUser?? && (currentUser.id)==(user.id)>
-                            <div class="text-right"><a href="/user/editProfile"><button class="btn btn-default">编辑个人资料</button></a></div>
+                            <div class="text-right"><a href="/user/editProfile">
+                                <button class="btn btn-default">编辑个人资料</button>
+                            </a></div>
                         </#if>
+
+                        <h5>
+                            <input type="hidden" id="entityId" value="${user.id}">
+                            <#if currentUser?? && (currentUser.id)!=(user.id) && hasFollowed! ==true>
+
+                                <button type="button" class="btn btn-secondary follow-btn  ">已关注</button>
+                            </#if>
+                            <#if currentUser?? && (currentUser.id)!=(user.id) && hasFollowed! ==false>
+
+                                <button type="button" class="btn btn-info follow-btn ">关注TA</button>
+                            </#if>
+                        </h5>
+
                     </div>
                 </div>
             </div>
@@ -83,11 +99,11 @@
             <div class="site-box">
                 <div class="row">
                     <div class="col-sm-6">
-                        <p class="text-center">关注了</p>
+                        <p class="text-center">关注数${followeeCount}</p>
                         <p class="text-center"><a class="info-num" href=""></a></p>
                     </div>
                     <div class="col-sm-6">
-                        <p class="text-center">关注者</p>
+                        <p class="text-center">粉丝数${followerCount}</p>
                         <p class="text-center"><a class="info-num" href=""></a></p>
                     </div>
                 </div>
@@ -103,5 +119,8 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="${request.contextPath}/js/follow.js"></script>
+
 </body>
 </html>

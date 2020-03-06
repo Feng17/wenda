@@ -3,6 +3,7 @@ package com.feng.wenda.controller;
 
 import com.feng.wenda.model.*;
 import com.feng.wenda.service.AnswerService;
+import com.feng.wenda.service.FollowService;
 import com.feng.wenda.service.QuestionService;
 import com.feng.wenda.service.UserService;
 import com.feng.wenda.util.Constant;
@@ -33,6 +34,9 @@ public class UserController {
 
     @Autowired
     AnswerService answerService;
+
+    @Autowired
+    FollowService followService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -75,7 +79,7 @@ public class UserController {
     }
 
     @RequestMapping("/editProfile")
-    public String editProfile(@RequestParam("name") String name,@RequestParam("description") String description ) {
+    public String editProfile(@RequestParam("name") String name, @RequestParam("description") String description) {
         User user = new User();
         user.setName(name);
         user.setDescription(description);
@@ -87,7 +91,7 @@ public class UserController {
 
     @RequestMapping(path = {"/uploadImage"}, method = {RequestMethod.POST})
     public String uploadImage(@RequestParam("file") MultipartFile file) {
-        userService.upload(file,hostHolder.getUser().getId());
+        userService.upload(file, hostHolder.getUser().getId());
         return "redirect:/user/editProfile";
 
     }
@@ -109,18 +113,27 @@ public class UserController {
     }
 
 
-
-    @RequestMapping(value = {"/user/{userId}/home","/user/{userId}/question"})
+    @RequestMapping(value = {"/user/{userId}/home", "/user/{userId}/question"})
     public String userQuestion(Model model, @PathVariable("userId") int userId) {
         User user = userService.selectUserById(userId);
         model.addAttribute("user", user);
         model.addAttribute("userQuestions", getUserQuestions(userId));
-        return "userQuestion";
-    }
 
-    private List<Question> getUserQuestions(int userId) {
-        List<Question> userQuestions = questionService.getUserQuestions(userId);
-        return userQuestions;
+        // 关注数量
+        long followeeCount = followService.getFolloweeCount(userId, EntityType.ENTITY_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        // 粉丝数量
+        long followerCount = followService.getFollowerCount(EntityType.ENTITY_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        // 是否已关注
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), EntityType.ENTITY_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+
+
+        return "userQuestion";
     }
 
 
@@ -129,16 +142,32 @@ public class UserController {
         User user = userService.selectUserById(userId);
         model.addAttribute("user", user);
         model.addAttribute("vos", getUserAnswers(userId));
+
+        long followeeCount = followService.getFolloweeCount(userId, EntityType.ENTITY_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        long followerCount = followService.getFollowerCount(EntityType.ENTITY_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), EntityType.ENTITY_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+
         return "userAnswer";
+    }
+
+    private List<Question> getUserQuestions(int userId) {
+        List<Question> userQuestions = questionService.getUserQuestions(userId);
+        return userQuestions;
     }
 
     private List<ViewObject> getUserAnswers(int userId) {
         List<Answer> userAnswerList = answerService.getUserAnswers(userId);
         List<ViewObject> vos = new ArrayList<>();
-        for (Answer answer : userAnswerList){
+        for (Answer answer : userAnswerList) {
             ViewObject vo = new ViewObject();
-            vo.set("answer",answer);
-            vo.set("question",questionService.selectQuestionById(answer.getQuestionId()));
+            vo.set("answer", answer);
+            vo.set("question", questionService.selectQuestionById(answer.getQuestionId()));
             vos.add(vo);
         }
         return vos;
